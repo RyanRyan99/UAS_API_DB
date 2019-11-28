@@ -1,10 +1,12 @@
 package com.example.uas_api_db.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.uas_api_db.activities.AnimasiActivity;
 import com.example.uas_api_db.model.animasi;
 import com.example.uas_api_db.R;
 
@@ -41,9 +44,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view ;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         view = inflater.inflate(R.layout.animasi_row,parent,false) ;
+        final MyViewHolder viewHolder = new MyViewHolder(view) ;
+        viewHolder.view_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, AnimasiActivity.class);
+                i.putExtra("nama_animasi",mData.get(viewHolder.getAdapterPosition()).getNama());
+                i.putExtra("deskripsi_animasi",mData.get(viewHolder.getAdapterPosition()).getDeskripsi());
+                i.putExtra("studio_animasi",mData.get(viewHolder.getAdapterPosition()).getStudio());
+                i.putExtra("kategori_animasi",mData.get(viewHolder.getAdapterPosition()).getKategori());
+                i.putExtra("episode_animasi",mData.get(viewHolder.getAdapterPosition()).getEpisode());
+                i.putExtra("rating_animasi",mData.get(viewHolder.getAdapterPosition()).getRating());
+                i.putExtra("gambar_animasi",mData.get(viewHolder.getAdapterPosition()).getGambar_url());
+
+                mContext.startActivity(i);
+            }
+        });
 
 
-        return new MyViewHolder(view);
+
+        return viewHolder;
     }
 
     @Override
@@ -73,11 +93,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView tv_studio;
         TextView tv_kategori;
         ImageView img_thumbnail;
+        LinearLayout view_container;
 
 
         public MyViewHolder(View itemView)
         {
             super(itemView);
+            view_container = itemView.findViewById(R.id.container);
             tv_nama = itemView.findViewById(R.id.nama_animasi);
             tv_kategori = itemView.findViewById(R.id.kategori);
             tv_rating = itemView.findViewById(R.id.rating);
